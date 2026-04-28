@@ -1,4 +1,4 @@
-// URL Cloudflare Pages API
+// WORKER API - Оставьте пустым для работы на том же домене
 const WORKER_URL = '';
 
 // DOM Elements

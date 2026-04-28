@@ -1,11 +1,17 @@
 name = "parser"
 compatibility_date = "2026-04-28"
 compatibility_flags = ["nodejs_compat"]
-pages_build_output_dir = "public"
 
+# Этот раздел говорит Воркеру: "Бери статику из этой папки"
+assets = { directory = "public", binding = "ASSETS" }
+
+# Точка входа в программу
+main = "src/index.js"
+
+# Биндинг браузера (Browser Run)
 browser = { binding = "MYBROWSER" }
 
 [[d1_databases]]
 binding = "DB"
 database_name = "price_history"
-database_id = "0af80c71-f90f-4771-9962-ab2db6976ac5"
+database_id = "ВСТАВЬ_СЮДА_ID_ТВОЕЙ_БАЗЫ_ИЗ_ПАНЕЛИ_CLOUDFLARE"
