@@ -1,0 +1,16 @@
+{
+  "name": "salidzini-parser",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "echo 'No build step needed'",
+    "dev": "wrangler pages dev public",
+    "deploy": "wrangler pages deploy public"
+  },
+  "dependencies": {
+    "@cloudflare/puppeteer": "^0.0.13"
+  },
+  "devDependencies": {
+    "wrangler": "^3.0.0"
+  }
+}
