@@ -1,0 +1,11 @@
+name = "parser"
+compatibility_date = "2026-04-28"
+compatibility_flags = ["nodejs_compat"]
+
+[browser]
+binding = "MYBROWSER"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "price_history"
+database_id = "0af80c71-f90f-4771-9962-ab2db6976ac5"
