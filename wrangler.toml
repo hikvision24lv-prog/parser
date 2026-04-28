@@ -1,9 +1,7 @@
 name = "parser"
 compatibility_date = "2026-04-28"
 compatibility_flags = ["nodejs_compat"]
-
-main = "src/index.js"
-assets = { directory = "public" }
+pages_build_output_dir = "public"
 
 browser = { binding = "MYBROWSER" }
 

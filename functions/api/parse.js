@@ -7,12 +7,17 @@ const SELECTORS = {
     price: ".item_price"               
 };
 
-export default async function handleParse(request, env) {
+export async function onRequest(context) {
+    if (context.request.method !== "POST") {
+        return new Response("Method not allowed", { status: 405 });
+    }
+
+    const { env, request } = context;
     const logs = [];
     const log = (msg) => logs.push(`[${new Date().toISOString().split('T')[1].slice(0,8)}] ${msg}`);
 
     try {
-        log("API Request received in Worker.");
+        log("API Request received in Pages Function.");
         const body = await request.json();
         const { query, minPrice } = body;
 
@@ -27,13 +32,12 @@ export default async function handleParse(request, env) {
         log(`Navigating to URL: ${searchUrl}`);
 
         if (!env.MYBROWSER) {
-            throw new Error("CRITICAL: 'MYBROWSER' binding is missing. Please link Browser Run in wrangler.toml.");
+            throw new Error("CRITICAL: 'MYBROWSER' binding is missing. Please ensure Cloudflare Pages read the wrangler.toml file.");
         }
 
         log("Launching Headless Chrome (Puppeteer)...");
         let browser;
         try {
-            // puppeteer.launch often fails if limits exceed or it's misconfigured
             log("Awaiting CF Browser Run allocation...");
             browser = await puppeteer.launch(env.MYBROWSER, {
                 keep_alive: 10000 
