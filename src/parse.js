@@ -7,7 +7,7 @@ const SELECTORS = {
     price: ".item_price"               
 };
 
-export async function onRequestPost({ request, env }) {
+export default async function handleParse(request, env) {
     const logs = [];
     const log = (msg) => logs.push(`[${new Date().toISOString().split('T')[1].slice(0,8)}] ${msg}`);
 
@@ -27,22 +27,22 @@ export async function onRequestPost({ request, env }) {
         log(`Navigating to URL: ${searchUrl}`);
 
         if (!env.MYBROWSER) {
-            throw new Error("CRITICAL: 'MYBROWSER' binding is missing. Please link Browser Rendering in Cloudflare Pages Settings.");
+            throw new Error("CRITICAL: 'MYBROWSER' binding is missing. Please link Browser Run in wrangler.toml.");
         }
 
         log("Launching Headless Chrome (Puppeteer)...");
         let browser;
         try {
             // puppeteer.launch often fails if limits exceed or it's misconfigured
-            log("Awaiting CF Browser Rendering allocation...");
+            log("Awaiting CF Browser Run allocation...");
             browser = await puppeteer.launch(env.MYBROWSER, {
                 keep_alive: 10000 
             });
             log("Browser allocated successfully.");
         } catch (launchErr) {
             log(`CRITICAL PUPPETEER ERROR: ${launchErr.message}`);
-            if (launchErr.message.includes("Browser.getVersion timed out") || launchErr.message.includes("timeout")) {
-                throw new Error("Не удалось запустить браузер (Timeout). Это 100% проблема лимитов Cloudflare. Бесплатный тариф Browser Rendering сильно ограничен либо требует привязки карты ($5/мес Workers Paid). Проверьте раздел Workers & Pages -> Browser Rendering в Cloudflare.");
+            if (launchErr.message.includes("Browser.getVersion timed out") || launchErr.message.includes("timeout") || launchErr.message.includes("429")) {
+                throw new Error("Не удалось запустить браузер. Если ошибка 429 (Browser time limit exceeded) - исчерпан бесплатный лимит 10 минут в день (Browser Run). Восстановится на следующий день. Либо возник таймаут запуска.");
             }
             throw launchErr;
         }
@@ -130,7 +130,6 @@ export async function onRequestPost({ request, env }) {
             });
         }
 
-        // Мягкая проверка БД D1 (не будет падать, если ты ее еще не создал)
         if (env.DB) {
             log("Saving results to D1 Database...");
             try {

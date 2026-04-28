@@ -2,8 +2,10 @@ name = "parser"
 compatibility_date = "2026-04-28"
 compatibility_flags = ["nodejs_compat"]
 
-[browser]
-binding = "MYBROWSER"
+main = "src/index.js"
+assets = { directory = "public" }
+
+browser = { binding = "MYBROWSER" }
 
 [[d1_databases]]
 binding = "DB"
